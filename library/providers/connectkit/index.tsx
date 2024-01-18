@@ -1,15 +1,7 @@
-import {
-  ConnectKitProvider as _ConnectKitProvider,
-  ConnectKitButton,
-} from "connectkit";
+import { ConnectKitProvider as _ConnectKitProvider } from "connectkit";
 
 const ConnectKitProvider = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <_ConnectKitProvider>
-      <ConnectKitButton />
-      {children}
-    </_ConnectKitProvider>
-  );
+  return <_ConnectKitProvider>{children}</_ConnectKitProvider>;
 };
 
 export default ConnectKitProvider;
