@@ -1,5 +1,12 @@
+import { ConnectKitButton } from "connectkit";
+
 const Header = () => {
-  return <div>Header</div>;
+  return (
+    <div>
+      <div>Header</div>
+      <ConnectKitButton />
+    </div>
+  );
 };
 
 export default Header;
