@@ -11,13 +11,17 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <RootProvider>
-          <main className=" flex flex-col gap-1 w-screen relative h-screen">
-            <Header />
-            <div className=" flex px-1 gap-1 h-full">{children}</div>
-            <Footer className=" pt-8" />
-          </main>
+      <RootProvider>
+
+      <main className="flex flex-col gap-1 w-screen relative h-screen">
+          <Header />
+          <div className="flex flex-col gap-1 w-screen flex-1 overflow-y-scroll">
+            <div className="flex-1">{children}</div>
+            <Footer className="pt-8" />
+          </div>
+        </main>
         </RootProvider>
+
       </body>
     </html>
   );
