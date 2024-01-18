@@ -9,7 +9,8 @@ const { chains, publicClient } = configureChains([sepolia], [publicProvider()]);
 const { connectors } = getDefaultConfig({
   appName: "Dekan Capital",
   chains: chains,
-  walletConnectProjectId: "00ed1a865e5bf256fcf17b7eab1e0ce0",
+  walletConnectProjectId:
+    process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "",
 });
 
 const config = createConfig({
