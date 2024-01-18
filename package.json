@@ -12,10 +12,13 @@
     "@swc-node/register": "^1.6.8",
     "chokidar": "^3.5.3",
     "clsx": "^2.1.0",
+    "connectkit": "^1.6.0",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
-    "tailwind-merge": "^2.2.0"
+    "tailwind-merge": "^2.2.0",
+    "viem": "^1.21.4",
+    "wagmi": "^1.4.13"
   },
   "devDependencies": {
     "@types/node": "^20",
