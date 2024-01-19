@@ -20,7 +20,7 @@ const FundingPoolSection = () => {
   return (
     <div className=" flex-1 h-full border-r border-r-[#e4e5e6] pr-4">
       <p className=" font-medium border-b py-4 border-b-[#e4e5e6]">
-        Funding Pool
+        Funding Pools
       </p>
       <div className=" py-3">
         {data.map((prop, i) => (
