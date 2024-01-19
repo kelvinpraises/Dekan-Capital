@@ -4,7 +4,7 @@ type State = {
   appActive: boolean;
   userAddress: string;
   userName: string;
-  userAvatarUrl: string;
+  userAvatarURL: string;
   modalStep: {
     status: string;
   }[];
@@ -17,7 +17,7 @@ type Actions = {
   setAppActive: (isActive: boolean) => void;
   setUserAddress: (address: string) => void;
   setUserName: (name: string) => void;
-  setUserAvatarUrl: (avatarUrl: string) => void;
+  setUserAvatarURL: (avatarURL: string) => void;
   setModalStep: (modalStep: { status: string }[]) => void;
   setModalStepIndex: (index: number, item: { status: string }) => void;
   setTransactionHashes: (txHashes: { [key: string]: string }) => void;
@@ -27,7 +27,7 @@ export default immer<State & Actions>((set, get) => ({
   appActive: false,
   userAddress: "",
   userName: "",
-  userAvatarUrl: "",
+  userAvatarURL: "",
   modalStep: [],
   txHashes: {},
 
@@ -46,9 +46,9 @@ export default immer<State & Actions>((set, get) => ({
       state.userName = name;
     }),
 
-  setUserAvatarUrl: (avatarUrl) =>
+  setUserAvatarURL: (avatarURL) =>
     set((state) => {
-      state.userAvatarUrl = avatarUrl;
+      state.userAvatarURL = avatarURL;
     }),
 
   setModalStep: (modalStep) =>
