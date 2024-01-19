@@ -13,7 +13,7 @@ CREATE TABLE EcoFunds (
     createdBy TEXT NOT NULL,
     allocationProposalId TEXT NOT NULL,
     userId INTEGER NOT NULL,
-    logoURL TEXT NOT NULL,
+    emoji TEXT NOT NULL,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     strategyAddress TEXT NOT NULL,
