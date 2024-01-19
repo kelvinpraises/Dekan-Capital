@@ -7,12 +7,13 @@ interface inputProps {
   disabled?: boolean;
   input: boolean;
   value: string;
+  className?: string;
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 const Input = (prop: inputProps) => {
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className={cn("flex flex-col gap-2 w-full")}>
       {prop.label && <p className=" text-sm font-normal">{prop.label}</p>}
       {prop.input ? (
         <input
@@ -20,7 +21,8 @@ const Input = (prop: inputProps) => {
           className={cn(
             "bg-[#DEE6E5] p-4 rounded-md outline-none w-full",
             prop.disabled &&
-              "bg-white shadow-[0_0_0_2px] shadow-[#DEE6E5] outline-none"
+              "bg-white shadow-[0_0_0_2px] shadow-[#DEE6E5] outline-none",
+            prop.className
           )}
           value={prop.value}
           onChange={prop.onChange}
@@ -31,7 +33,8 @@ const Input = (prop: inputProps) => {
           className={cn(
             "bg-[#DEE6E5] p-4 rounded-md h-[113px] outline-none",
             prop.disabled &&
-              "bg-white shadow-[0_0_0_2px] shadow-[#DEE6E5] outline-none"
+              "bg-white shadow-[0_0_0_2px] shadow-[#DEE6E5] outline-none",
+            prop.className
           )}
           value={prop.value}
           onChange={prop.onChange}

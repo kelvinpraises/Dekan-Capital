@@ -1,3 +1,4 @@
+import { cn } from "@/library/utils";
 import Link from "next/link";
 
 interface buttonProps {
@@ -6,6 +7,7 @@ interface buttonProps {
   buttonImg?: string;
   link?: boolean;
   href?: string;
+  className?: string;
 }
 
 const Button = (button: buttonProps) => {
@@ -13,7 +15,10 @@ const Button = (button: buttonProps) => {
     <>
       {button.link ? (
         <Link
-          className=" py-4 rounded-[5px] text-sm text-[#767b82] flex items-center justify-center"
+          className={cn(
+            "py-4 rounded-[5px] text-sm text-[#767b82] flex items-center justify-center",
+            button.className
+          )}
           href={button.href || ""}
         >
           {button.text}
@@ -24,7 +29,10 @@ const Button = (button: buttonProps) => {
       ) : (
         <button
           onClick={button.handleClick}
-          className=" py-2 px-4 rounded-[5px] text-sm bg-[#313B3D] text-white flex items-center justify-center"
+          className={cn(
+            "py-4 px-4 rounded-[5px] text-sm font-bold bg-[#313B3D] text-white flex items-center justify-center",
+            button.className
+          )}
         >
           {button.text}
           {button.buttonImg && (
