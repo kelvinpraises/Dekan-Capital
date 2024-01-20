@@ -5,8 +5,8 @@ interface SwitchProps {
   description: string;
   optional?: boolean;
   disabled?: boolean;
-  value: string;
-  onChange: (e: any) => void;
+  value: boolean;
+  onChange: (checked: boolean) => void;
 }
 
 const Switch = (prop: SwitchProps) => {
@@ -20,6 +20,8 @@ const Switch = (prop: SwitchProps) => {
         <_Switch.Root
           className="w-[42px] h-[25px] bg-gray-300 rounded-full relative shadow-md focus:outline-none cursor-pointer data-[state=checked]:bg-[#63392c]/80"
           id="toggle-switch"
+          checked={prop.value}
+          onCheckedChange={prop.onChange}
         >
           <_Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full shadow-md transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
         </_Switch.Root>
