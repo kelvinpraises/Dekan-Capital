@@ -1,5 +1,5 @@
 "use client";
-import { createUser } from "@/library/backendAPI";
+import { createUser } from "@/library/services/backendAPI";
 import { useStore } from "@/library/store/useStore";
 import { useModal, useSIWE } from "connectkit";
 import { useState, useEffect } from "react";
