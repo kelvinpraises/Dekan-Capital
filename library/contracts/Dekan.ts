@@ -1,4 +1,5 @@
 const Dekan = {
+    address: '0x',
   abi: [
     {
       inputs: [
@@ -1379,6 +1380,6 @@ const Dekan = {
       type: "function",
     },
   ],
-};
+} as const;
 
 export default Dekan;
