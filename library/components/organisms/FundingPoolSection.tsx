@@ -4,7 +4,7 @@ const FundingPoolSection = () => {
   const data = [
     {
       title: "Write a twitter thread about moongate",
-      href: "",
+      href: "/pools/1",
       imgsrc: "/pic.svg",
       closing: "7",
       open: false,
