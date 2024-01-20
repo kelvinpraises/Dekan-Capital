@@ -37,11 +37,11 @@ const StrategySelect = (prop: selectProps) => (
           </Select.ScrollUpButton>
           <Select.Viewport className="p-[5px]">
             <Select.Group>
-              <SelectItem value="apple">Apple</SelectItem>
-              <SelectItem value="banana">Banana</SelectItem>
-              <SelectItem value="blueberry">Blueberry</SelectItem>
-              <SelectItem value="grapes">Grapes</SelectItem>
-              <SelectItem value="pineapple">Pineapple</SelectItem>
+              <SelectItem value="dvmdd">Donation Voting Merkle Distribution Drip</SelectItem>
+              <SelectItem disabled value="qv">Quadratic Voting</SelectItem>
+              <SelectItem disabled value="dg">Direct Grant</SelectItem>
+              <SelectItem disabled value="dvmdv">Donation Voting Merkle Distribution Vault</SelectItem>
+              <SelectItem disabled value="rfp">Request For Proposal</SelectItem>
             </Select.Group>
           </Select.Viewport>
           <Select.ScrollDownButton className="flex items-center justify-center h-[25px] bg-white cursor-default">
@@ -66,7 +66,8 @@ const SelectItem = React.forwardRef<
     <Select.Item
       className={cn(
         "leading-none rounded-[3px] flex items-center h-[25px] p-5 pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-[#fcecd6] data-[highlighted]:text-violet1",
-        className
+        className,
+        props?.disabled && " text-gray-400 after:content-['disabled'] after:ml-2 after:text-xs"
       )}
       {...props}
       ref={forwardedRef}
