@@ -5,7 +5,7 @@ import { ChangeEvent, useReducer } from "react";
 import Button from "@/library/components/atoms/Button";
 import Input from "@/library/components/molecules/Input";
 import EmojiPicker from "@/library/components/organisms/EmojiPicker";
-import { createEcoFund } from "@/library/backendAPI";
+import { createEcoFund } from "@/library/services/backendAPI";
 import Switch from "@/library/components/atoms/Switch";
 import StrategySelect from "@/library/components/molecules/StrategySelect";
 import Concentric from "@/library/components/molecules/Concentric";
@@ -13,8 +13,10 @@ import Concentric from "@/library/components/molecules/Concentric";
 export interface NewFundPool {
   emoji: string;
   title: string;
-  tokenAmount: number; // TODO: add this
-  description: string;
+  details: string;
+  tokenAmount: number;
+  streamDonation: boolean;
+  strategy: string;
   registrationEnd: number;
   allocationEnd: number;
   createdAt: number;
@@ -48,8 +50,10 @@ const NewFundPool = () => {
     {
       emoji: "",
       title: "",
+      details: "",
       tokenAmount: 0,
-      description: "",
+      streamDonation: false,
+      strategy: "",
       registrationEnd: Math.floor(new Date().getTime() / 1000), // Convert to Unix timestamp already in UTC
       allocationEnd: Math.floor(new Date().getTime() / 1000), // Convert to Unix timestamp already in UTC
       createdAt: Math.floor(new Date().getTime() / 1000),
@@ -82,10 +86,10 @@ const NewFundPool = () => {
             </div>
           </div>
           <Input
-            label={"Proposal Description"}
+            label={"Details"}
             type="rich"
-            value={values.description}
-            onChange={(e) => updateValues({ description: e.target.value })}
+            value={values.details}
+            onChange={(e) => updateValues({ details: e.target.value })}
           />
         </div>
 
@@ -95,19 +99,14 @@ const NewFundPool = () => {
           <h2 className="font-bold text-xl">Allocation Strategy</h2>
 
           <div className=" w-[480px] flex flex-col gap-8">
-            <div className=" w-[480px] flex flex-col gap-4">
-              <Switch
-                label="Stream Donation"
-                optional
-                description={
-                  "After donation is over stream tokens to recipients"
-                }
-                value={""}
-                onChange={function (e: any): void {
-                  throw new Error("Function not implemented.");
-                }}
-              />
-            </div>
+            <Switch
+              label="Stream Donation"
+              optional
+              description={"After donation is over stream tokens to recipients"}
+              value={values.streamDonation}
+              onChange={(e) => updateValues({ streamDonation: e })}
+            />
+
             <StrategySelect
               value={""}
               onChange={function (
@@ -117,6 +116,7 @@ const NewFundPool = () => {
               }}
               input={false}
             />
+
             <div className=" w-[480px] flex flex-col gap-4">
               <div className="flex gap-4">
                 <Input
@@ -213,14 +213,16 @@ const NewFundPool = () => {
             </div>
 
             <Input
-              label={"Pool Managers"}
+              label={"Token Amount"}
               type="text"
-              value={values.description}
-              onChange={(e) => updateValues({ description: e.target.value })}
+              value={values.tokenAmount.toString()}
+              onChange={(e) =>
+                updateValues({ tokenAmount: parseFloat(e.target.value) })
+              }
             />
 
             <Input
-              label="Registration Questions (Optional)"
+              label="Pool Managers"
               type="tag"
               value={values.title}
               onChange={(e) => updateValues({ title: e.target.value })}
