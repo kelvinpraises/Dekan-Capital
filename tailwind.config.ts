@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        lexend: ["var(--font-lexend)"],
+      },
       keyframes: {
         overlayShow: {
           from: { opacity: "0" },
