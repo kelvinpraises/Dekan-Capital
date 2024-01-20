@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useReducer } from "react";
 
 import Button from "@/library/components/atoms/Button";
-import Input from "@/library/components/atoms/Input";
+import Input from "@/library/components/molecules/Input";
 import EmojiPicker from "@/library/components/organisms/EmojiPicker";
 import { createEcoFund } from "@/library/backendAPI";
 import Toggle from "@/library/components/atoms/Toggle";
@@ -230,7 +230,7 @@ const NewFundPool = () => {
 
             <Input
               label="Registration Questions (Optional)"
-              type="text"
+              type="tag"
               value={values.title}
               onChange={(e) => updateValues({ title: e.target.value })}
             />
