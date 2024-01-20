@@ -5,7 +5,7 @@ import { ChangeEvent } from "react";
 import { cn } from "@/library/utils";
 
 interface inputProps {
-  type?: "text" | "datetime-local" | "textarea" | "rich";
+  type?: "text" | "datetime-local" | "textarea" | "rich" | "tag";
   label?: string;
   disabled?: boolean;
   value: string;
@@ -21,6 +21,28 @@ const EditorBlock = dynamic(
 );
 
 const Input = (prop: inputProps) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && e.currentTarget.value === "") {
+      // Remove the last tag when backspace is pressed on an empty input
+      const newTags = prop.value.trim().split(" ").slice(0, -1);
+      prop.onChange({
+        target: { value: newTags.join(" ") },
+      } as any);
+    } else if (e.key === " " || e.key === "Enter") {
+      // Prevent default behavior to avoid adding actual spaces
+      e.preventDefault();
+      const newTag = e.currentTarget.value.trim();
+      if (newTag !== "") {
+        // Add the new tag when space or enter is pressed
+        const newTags = prop.value.trim() + " " + newTag;
+        prop.onChange({
+          target: { value: newTags },
+        } as any);
+        e.currentTarget.value = "";
+      }
+    }
+  };
+
   const renderInput = () => {
     switch (prop.type) {
       case "textarea":
@@ -48,6 +70,40 @@ const Input = (prop: inputProps) => {
                 } as any)
               }
               holder="editorjs-container"
+            />
+          </div>
+        );
+      case "tag":
+        const tags = prop.value.split(" ").filter(Boolean);
+        return (
+          <div className="flex gap-2 flex-wrap p-4 bg-[#fcecd6] rounded-md">
+            {tags.map((tag, index) => (
+              <div
+                key={index}
+                className="bg-gray-200 rounded-full px-2 text-sm mr-2 flex items-center"
+              >
+                <span>{tag}</span>
+                <span
+                  className="ml-1 cursor-pointer font-bold"
+                  onClick={() => {
+                    const newTags = tags.filter((_, i) => i !== index);
+                    prop.onChange({
+                      target: { value: newTags.join(" ") },
+                    } as any);
+                  }}
+                >
+                  x
+                </span>
+              </div>
+            ))}
+            <input
+              type="text"
+              className={cn(
+                "outline-none bg-transparent",
+                prop.className
+              )}
+              onKeyDown={handleKeyDown}
+              disabled={prop.disabled}
             />
           </div>
         );
