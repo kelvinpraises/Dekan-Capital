@@ -98,10 +98,7 @@ const Input = (prop: inputProps) => {
             ))}
             <input
               type="text"
-              className={cn(
-                "outline-none bg-transparent",
-                prop.className
-              )}
+              className={cn("outline-none bg-transparent", prop.className)}
               onKeyDown={handleKeyDown}
               disabled={prop.disabled}
             />
