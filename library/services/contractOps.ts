@@ -7,6 +7,7 @@ import {
 } from "viem";
 import { sepolia } from "viem/chains";
 
+import AlloContract from "../contract/Allo";
 import DVMDDContract from "../contract/DVMDD";
 
 const publicClient = createPublicClient({
@@ -51,7 +52,7 @@ export const deployDVMDD = async ({
     ...DVMDDContract,
     account,
     args: [
-      "0xfF65C1D4432D23C45b0730DaeCd03b6B92cd074a",
+      (process.env.NEXT_PUBLIC_ALLO_CONTRACT_ADDRESS as Address) || "0x",
       "DonationVotingMerkleDistributionDrip",
     ],
     gas: BigInt(5_000_000),
@@ -64,9 +65,54 @@ export const deployDVMDD = async ({
   callback({ "Strategy creation hash": txHash }, receipt.contractAddress!);
 };
 
-export const setupAllo = async () => {
-  // create pool strategy
-  // aprove allo && strategy to use your DEKAN
-  // set timelock as manager
+export const setupAllo = async ({
+  strategy,
+  tokenAmount,
+  callback,
+  poolProfileId,
+  poolManagers,
+}: {
+  strategy: Address;
+  tokenAmount: number;
+  callback: (txHash: { [key: string]: Address }) => void;
+  poolProfileId?: string;
+  poolManagers: `0x${string}`[];
+}) => {
+  const wallet = await walletClient();
+  const [account] = await wallet.getAddresses();
+
+  // TODO: create a pool profile id
+
+  // TODO: approve allo && strategy to use your DEKAN
+
+  // create funding pool
+  const { request: req1 } = await publicClient.simulateContract({
+    ...AlloContract,
+    functionName: "createPoolWithCustomStrategy",
+    args: [
+      "0x", // TODO:
+      strategy,
+      "0x_ABI_ENCODE_STRATEGY_ARGS", // TODO:
+      (process.env.NEXT_PUBLIC_DEKAN_CONTRACT_ADDRESS as Address) || "0x",
+      BigInt(tokenAmount),
+      { protocol: BigInt(1), pointer: "" },
+      poolManagers,
+    ],
+    account,
+  });
+
   // renounce admin role
+  const { request: req2 } = await publicClient.simulateContract({
+    ...AlloContract,
+    functionName: "revokeRole",
+    args: [],
+    account,
+  });
+
+  const req1TxHash = await wallet.writeContract(req1);
+  const req2TxHash = await wallet.writeContract(req2);
+
+  callback({
+    "Strategy creation hash": req1TxHash,
+  });
 };
