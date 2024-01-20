@@ -6,7 +6,7 @@ import Button from "@/library/components/atoms/Button";
 import Input from "@/library/components/molecules/Input";
 import EmojiPicker from "@/library/components/organisms/EmojiPicker";
 import { createEcoFund } from "@/library/backendAPI";
-import Toggle from "@/library/components/atoms/Toggle";
+import Switch from "@/library/components/atoms/Switch";
 import StrategySelect from "@/library/components/molecules/StrategySelect";
 import Concentric from "@/library/components/molecules/Concentric";
 
@@ -96,21 +96,12 @@ const NewFundPool = () => {
 
           <div className=" w-[480px] flex flex-col gap-8">
             <div className=" w-[480px] flex flex-col gap-4">
-              <Toggle
+              <Switch
                 label="Stream Donation"
                 optional
                 description={
                   "After donation is over stream tokens to recipients"
                 }
-                value={""}
-                onChange={function (e: any): void {
-                  throw new Error("Function not implemented.");
-                }}
-              />
-              <Toggle
-                label="Registry Anchor Required"
-                optional
-                description={"Recipients must have an registry anchor address "}
                 value={""}
                 onChange={function (e: any): void {
                   throw new Error("Function not implemented.");
