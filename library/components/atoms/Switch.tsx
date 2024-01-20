@@ -1,4 +1,4 @@
-interface ToggleProps {
+interface SwitchProps {
   label?: string;
   description: string;
   optional?: boolean;
@@ -7,7 +7,7 @@ interface ToggleProps {
   onChange: (e: any) => void;
 }
 
-const Toggle = (prop: ToggleProps) => {
+const Switch = (prop: SwitchProps) => {
   return (
     <div>
       <span className="flex gap-2">
@@ -21,4 +21,4 @@ const Toggle = (prop: ToggleProps) => {
   );
 };
 
-export default Toggle;
+export default Switch;
