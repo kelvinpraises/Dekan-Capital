@@ -30,13 +30,13 @@ const Button = (button: buttonProps) => {
         <button
           onClick={button.handleClick}
           className={cn(
-            "py-4 px-4 rounded-[5px] text-sm font-bold bg-[#313B3D] text-white flex items-center justify-center",
+            "flex items-center justify-center font-bold text-white text-base leading-normal m-0 py-3 px-4 bg-[#63392c] rounded-lg border-[none] shadow-[0_0px_1px_hsla(0,0%,0%,0.2),0_1px_2px_hsla(0,0%,0%,0.2)] hover:shadow-[0_0px_1px_hsla(0,0%,0%,0.6),0_1px_8px_hsla(0,0%,0%,0.2)] active:shadow-[0_0px_1px_hsla(0,0%,0%,0.4)] active:translate-y-[1px] active:bg-[#63392c]",
             button.className
           )}
         >
           {button.text}
           {button.buttonImg && (
-            <img src={`/${button.buttonImg}`} className=" pl-4" />
+            <img src={`/${button.buttonImg}`} className="pl-4" />
           )}
         </button>
       )}
