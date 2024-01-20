@@ -7,8 +7,10 @@ import {
 } from "viem";
 import { sepolia } from "viem/chains";
 
-import AlloContract from "../contract/Allo";
-import DVMDDContract from "../contract/DVMDD";
+import AlloContract from "../contracts/Allo";
+import DVMDDContract from "../contracts/DVMDD";
+import DekanContract from "../contracts/Dekan";
+import RegistryContract from "../contracts/Registry";
 
 const publicClient = createPublicClient({
   chain: sepolia,
@@ -81,16 +83,36 @@ export const setupAllo = async ({
   const wallet = await walletClient();
   const [account] = await wallet.getAddresses();
 
-  // TODO: create a pool profile id
+  // Create a pool profile id
+  const { request: req1, result: poolId } = await publicClient.simulateContract(
+    {
+      ...RegistryContract,
+      functionName: "createProfile",
+      args: [
+        BigInt(0),
+        "Pool Profile",
+        { protocol: BigInt(1), pointer: "Profile1" },
+        account,
+        [],
+      ],
+      account,
+    }
+  );
 
-  // TODO: approve allo && strategy to use your DEKAN
+  // Approve Allo on DEKAN
+  const { request: req2 } = await publicClient.simulateContract({
+    ...DekanContract,
+    functionName: "approve",
+    args: [AlloContract.address, BigInt(0)],
+    account,
+  });
 
-  // create funding pool
-  const { request: req1 } = await publicClient.simulateContract({
+  // Create a pool
+  const { request: req3 } = await publicClient.simulateContract({
     ...AlloContract,
     functionName: "createPoolWithCustomStrategy",
     args: [
-      "0x", // TODO:
+      "0x", // TODO: profile pool id
       strategy,
       "0x_ABI_ENCODE_STRATEGY_ARGS", // TODO:
       (process.env.NEXT_PUBLIC_DEKAN_CONTRACT_ADDRESS as Address) || "0x",
@@ -101,18 +123,23 @@ export const setupAllo = async ({
     account,
   });
 
-  // renounce admin role
-  const { request: req2 } = await publicClient.simulateContract({
+  // renounce pool admin role
+  const { request: req4 } = await publicClient.simulateContract({
     ...AlloContract,
     functionName: "revokeRole",
-    args: [],
+    args: ["0xRole", account],
     account,
   });
 
   const req1TxHash = await wallet.writeContract(req1);
   const req2TxHash = await wallet.writeContract(req2);
+  const req3TxHash = await wallet.writeContract(req3);
+  const req4TxHash = await wallet.writeContract(req4);
 
   callback({
-    "Strategy creation hash": req1TxHash,
+    "Pool profile creation hash": req1TxHash,
+    "Allo approval hash": req2TxHash,
+    "Create pool hash": req3TxHash,
+    "Renounce role hash": req4TxHash,
   });
 };
