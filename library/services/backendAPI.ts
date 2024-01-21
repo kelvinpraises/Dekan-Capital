@@ -4,10 +4,9 @@ export interface User {
 }
 
 export interface EcoFund {
-  userId: string;
   emoji: string;
   title: string;
-  description: string;
+  detail: string;
   strategyAddress: string;
   createdAt: number;
 }
@@ -64,7 +63,7 @@ export const getUser = async (userId: string) => {
 /*                     EcoFunds Section                     */
 /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
 
-export const createEcoFund = async (
+export const createPool = async (
   ecoFund: EcoFund,
   callback: (ecoFundId: string) => void
 ) => {
