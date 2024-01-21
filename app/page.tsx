@@ -1,5 +1,5 @@
 import AllPoolFunds from "@/library/components/organisms/AllPoolFunds";
-import MyPoolFunds from "@/library/components/organisms/MyPoolFunds";
+import MyPoolFunds from "@/library/components/organisms/YourPoolFunds";
 
 const page = () => {
   return (
