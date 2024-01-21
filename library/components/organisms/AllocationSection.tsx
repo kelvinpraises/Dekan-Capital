@@ -2,15 +2,15 @@
 import { useEffect, useReducer } from "react";
 
 import {
-  createEcoFundAllocation,
-  getEcoFundAllocations,
-  getEcoFundProjects,
-} from "@/library/backendAPI";
+  createPoolFundAllocation,
+  getPoolFundAllocations,
+  getPoolFundProjects,
+} from "@/library/services/backendAPI";
 import { useStore } from "@/library/store/useStore";
 import Button from "../atoms/Button";
 import AllocationCard from "../molecules/AllocationCard";
 
-interface ecoFundProjects {
+interface poolFundProjects {
   projectId: number;
   createdBy: string;
   tokensRequested: number;
@@ -36,46 +36,45 @@ interface Allocation {
   }[];
 }
 
-const AllocateSection = ({ ecoFundId }: { ecoFundId: any }) => {
+const initialState = {
+  showAllocateSentiment: false,
+  allocators: [],
+  personalAllocations: [],
+};
+
+const stateReducer = (
+  current: AllocateSectionState,
+  update: Partial<AllocateSectionState>
+): AllocateSectionState => {
+  return {
+    ...current,
+    ...update,
+  };
+};
+
+const AllocateSection = ({ poolFundId }: { poolFundId: any }) => {
   // TODO: take into consideration the previous allocations made by user, basically when user edits their prev choice
   useEffect(() => {
     (async () => {
-      const allocators = await getEcoFundAllocations(ecoFundId);
-      const ecoFundProjects: ecoFundProjects[] = await getEcoFundProjects(
-        ecoFundId
+      const allocators = await getPoolFundAllocations(poolFundId);
+      const poolFundProjects: poolFundProjects[] = await getPoolFundProjects(
+        poolFundId
       );
 
-      console.log(allocators);
-
-      const personalAllocations = ecoFundProjects.map((ecoFund) => {
+      const personalAllocations = poolFundProjects?.map((poolFund) => {
         return {
-          projectId: ecoFund.projectId,
+          projectId: poolFund.projectId,
           amount: 0,
-          title: ecoFund.title,
-          createdBy: ecoFund.createdBy,
+          title: poolFund.title,
+          createdBy: poolFund.createdBy,
         };
       });
 
       updateValues({ allocators, personalAllocations });
     })();
-  }, [ecoFundId]);
+  }, [poolFundId]);
 
-  const [values, updateValues] = useReducer(
-    (
-      current: AllocateSectionState,
-      update: Partial<AllocateSectionState>
-    ): AllocateSectionState => {
-      return {
-        ...current,
-        ...update,
-      };
-    },
-    {
-      showAllocateSentiment: false,
-      allocators: [],
-      personalAllocations: [],
-    }
-  );
+  const [values, updateValues] = useReducer(stateReducer, initialState);
 
   const userAddress = useStore((state) => state.userAddress);
   const userName = useStore((state) => state.userName);
@@ -95,19 +94,19 @@ const AllocateSection = ({ ecoFundId }: { ecoFundId: any }) => {
       <div className="flex flex-col gap-8">
         {values.showAllocateSentiment && (
           <AllocationCard
-            ecoFundId={ecoFundId}
+            poolFundId={poolFundId}
             name={userName}
             address={userAddress}
             open
             allocated={values.personalAllocations}
             updateValues={updateValues}
-            createEcoFundAllocation={createEcoFundAllocation}
+            createPoolFundAllocation={createPoolFundAllocation}
           />
         )}
         {values.allocators.map(({ name, address, allocated }) => {
           return (
             <AllocationCard
-              ecoFundId={ecoFundId}
+              poolFundId={poolFundId}
               name={name}
               address={address}
               allocated={allocated}
