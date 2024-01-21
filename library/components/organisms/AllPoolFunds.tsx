@@ -3,24 +3,18 @@ import FundingPoolCard from "../molecules/FundingPoolCard";
 const AllPoolFunds = () => {
   const data = [
     {
-      title: "Write a twitter thread about moongate",
-      href: "/pools/1",
-      imgsrc: "/pic.svg",
-      closing: "7",
-      open: false,
-    },
-    {
-      title: "Write a twitter thread about moongate",
-      href: "",
-      imgsrc: "/pic.svg",
-      closing: "7",
-      open: true,
+      avatarURL: "",
+      name: "Dreampiper",
+      title: "Test",
+      poolFundId: 1,
+      active: false,
+      poolSize: 1,
     },
   ];
   return (
     <div className=" flex-1 h-full border-r border-r-[#e4e5e6] pr-4">
       <p className=" font-medium border-b py-4 border-b-[#e4e5e6]">
-        Funding Pools
+        All Pool Funds
       </p>
       <div className=" py-3">
         {data.map((prop, i) => (
