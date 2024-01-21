@@ -3,14 +3,20 @@ import {
   createPublicClient,
   createWalletClient,
   custom,
+  encodeAbiParameters,
   http,
+  keccak256,
+  parseAbiParameters,
 } from "viem";
 import { sepolia } from "viem/chains";
 
+import AddressDriverContract from "../contracts/AddressDriver";
 import AlloContract from "../contracts/Allo";
 import DVMDDContract from "../contracts/DVMDD";
 import DekanContract from "../contracts/Dekan";
+import DripsContract from "../contracts/Drips";
 import RegistryContract from "../contracts/Registry";
+import CallerContract from "../contracts/Caller";
 
 const publicClient = createPublicClient({
   chain: sepolia,
@@ -69,77 +75,135 @@ export const deployDVMDD = async ({
 
 export const setupAllo = async ({
   strategy,
-  tokenAmount,
-  callback,
   poolProfileId,
-  poolManagers,
+  contractData,
+  callback,
 }: {
   strategy: Address;
-  tokenAmount: number;
-  callback: (txHash: { [key: string]: Address }) => void;
-  poolProfileId?: string;
-  poolManagers: `0x${string}`[];
+  poolProfileId?: Address;
+  contractData: {
+    tokenAmount: number;
+    poolManagers: Address[];
+    stream: boolean;
+    registrationStartTime: bigint;
+    registrationEndTime: bigint;
+    allocationStartTime: bigint;
+    allocationEndTime: bigint;
+  };
+  callback: (
+    txHash: { [key: string]: Address },
+    poolProfileId: Address
+  ) => void;
 }) => {
+  let profileIdToUse: Address;
+
   const wallet = await walletClient();
   const [account] = await wallet.getAddresses();
 
-  // Create a pool profile id
-  const { request: req1, result: poolId } = await publicClient.simulateContract(
-    {
-      ...RegistryContract,
-      functionName: "createProfile",
-      args: [
-        BigInt(0),
-        "Pool Profile",
-        { protocol: BigInt(1), pointer: "Profile1" },
+  let req1TxHash: Address | undefined = `0x`;
+
+  // Check if the initial profile id is null
+  if (!poolProfileId) {
+    // Create a pool profile id
+    const { request: req1, result: poolProfileId } =
+      await publicClient.simulateContract({
+        ...RegistryContract,
+        functionName: "createProfile",
+        args: [
+          BigInt(0),
+          "Pool Profile",
+          { protocol: BigInt(1), pointer: "Profile1" },
+          account,
+          [],
+        ],
         account,
-        [],
-      ],
-      account,
-    }
-  );
+      });
+
+    profileIdToUse = poolProfileId; // Use the poolProfileId as the profile id
+
+    req1TxHash = await wallet.writeContract(req1);
+  } else {
+    profileIdToUse = poolProfileId; // Use the profile id from the prop
+  }
 
   // Approve Allo on DEKAN
   const { request: req2 } = await publicClient.simulateContract({
     ...DekanContract,
     functionName: "approve",
-    args: [AlloContract.address, BigInt(0)],
+    args: [AlloContract.address, BigInt(2e18)],
     account,
   });
+
+  const predefinedList = {
+    useRegistryAnchor: false,
+    metadataRequired: false,
+    dripsAddress: DripsContract.address as Address,
+    callerAddress: CallerContract.address as Address,
+    driverAddress: AddressDriverContract.address as Address,
+    allowedTokens: [DekanContract.address] as Address[],
+  };
+
+  const initStrategyData = encodeAbiParameters(
+    parseAbiParameters(
+      "bool, bool, bool, uint64, uint64, uint64, uint64, address, address, address, address[]"
+    ),
+    [
+      predefinedList.useRegistryAnchor,
+      predefinedList.metadataRequired,
+      contractData.stream,
+      contractData.registrationStartTime,
+      contractData.registrationEndTime,
+      contractData.allocationStartTime,
+      contractData.allocationEndTime,
+      predefinedList.dripsAddress,
+      predefinedList.callerAddress,
+      predefinedList.driverAddress,
+      predefinedList.allowedTokens,
+    ]
+  );
 
   // Create a pool
-  const { request: req3 } = await publicClient.simulateContract({
-    ...AlloContract,
-    functionName: "createPoolWithCustomStrategy",
-    args: [
-      "0x", // TODO: profile pool id
-      strategy,
-      "0x_ABI_ENCODE_STRATEGY_ARGS", // TODO:
-      (process.env.NEXT_PUBLIC_DEKAN_CONTRACT_ADDRESS as Address) || "0x",
-      BigInt(tokenAmount),
-      { protocol: BigInt(1), pointer: "" },
-      poolManagers,
-    ],
-    account,
-  });
+  const { request: req3, result: poolId } = await publicClient.simulateContract(
+    {
+      ...AlloContract,
+      functionName: "createPoolWithCustomStrategy",
+      args: [
+        profileIdToUse,
+        strategy,
+        initStrategyData,
+        (process.env.NEXT_PUBLIC_DEKAN_CONTRACT_ADDRESS as Address) || "0x",
+        BigInt(contractData.tokenAmount),
+        { protocol: BigInt(1), pointer: "pool" },
+        contractData.poolManagers,
+      ],
+      account,
+    }
+  );
 
-  // renounce pool admin role
+  const role = "POOL_ADMIN_ROLE";
+  const roleHash = keccak256(
+    encodeAbiParameters(parseAbiParameters("uint256, string"), [poolId, role])
+  );
+
+  // Renounce pool admin role
   const { request: req4 } = await publicClient.simulateContract({
     ...AlloContract,
     functionName: "revokeRole",
-    args: ["0xRole", account],
+    args: [roleHash, account],
     account,
   });
 
-  const req1TxHash = await wallet.writeContract(req1);
   const req2TxHash = await wallet.writeContract(req2);
   const req3TxHash = await wallet.writeContract(req3);
   const req4TxHash = await wallet.writeContract(req4);
 
-  callback({
-    "Pool profile creation hash": req1TxHash,
-    "Allo approval hash": req2TxHash,
-    "Create pool hash": req3TxHash,
-    "Renounce role hash": req4TxHash,
-  });
+  callback(
+    {
+      "Pool profile creation hash": req1TxHash,
+      "Allo approval hash": req2TxHash,
+      "Create pool hash": req3TxHash,
+      "Renounce role hash": req4TxHash,
+    },
+    profileIdToUse
+  );
 };
