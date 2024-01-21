@@ -29,7 +29,7 @@ const stateReducer = (
   };
 };
 
-const ProjectSection = ({ poolFundId }: { poolFundId: any }) => {
+const ReviewSection = ({ poolFundId }: { poolFundId: any }) => {
   const [values, updateValues] = useReducer(stateReducer, initialState);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const ProjectSection = ({ poolFundId }: { poolFundId: any }) => {
         <Button text={"Upload Revision"} handleClick={undefined} />
       </div>
       <div className="flex flex-col gap-8">
-        {values.poolFundProjects.map(() => {
+        {values.poolFundProjects?.map(() => {
           return (
             <ReviewCard
               name={"fgfgfg"}
@@ -61,4 +61,4 @@ const ProjectSection = ({ poolFundId }: { poolFundId: any }) => {
   );
 };
 
-export default ProjectSection;
+export default ReviewSection;
