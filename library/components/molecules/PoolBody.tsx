@@ -1,18 +1,15 @@
-import { cn } from "@/library/utils";
 import { useState } from "react";
+
+import { cn } from "@/library/utils";
 import AllocationSection from "../organisms/AllocationSection";
 import DetailSection from "../organisms/DetailSection";
 import DistributionSection from "../organisms/DistributionSection";
 import ReviewSection from "../organisms/ReviewSection";
-import SubmitSection from "../organisms/SubmitSection";
-import VotingSection from "../organisms/VotingSection";
-import { usePathname } from "next/navigation";
 import ShowcaseSection from "../organisms/ShowcaseSection";
+import VotingSection from "../organisms/VotingSection";
 
-const PoolNav = () => {
+const PoolBody = ({ poolFundId }: { poolFundId: string }) => {
   const [activeScreen, setActiveScreen] = useState("detail");
-  const pathname = usePathname();
-  const id = pathname.split("/")[3];
 
   return (
     <div className="  bg-[#F3EFEE] flex-1 h-full">
@@ -59,21 +56,17 @@ const PoolNav = () => {
         {(() => {
           switch (activeScreen) {
             case "detail":
-              return (
-                <div className=" flex gap-8">
-                  <DetailSection /> <SubmitSection />
-                </div>
-              );
+              return <DetailSection />;
             case "showcase":
-              return <ShowcaseSection poolFundId={id} />;
+              return <ShowcaseSection {...{ poolFundId }} />;
             case "review":
-              return <ReviewSection poolFundId={id} />;
+              return <ReviewSection {...{ poolFundId }} />;
             case "allocate":
-              return <AllocationSection poolFundId={id} />;
+              return <AllocationSection {...{ poolFundId }} />;
             case "vote":
-              return <VotingSection poolFundId={id} />;
+              return <VotingSection {...{ poolFundId }} />;
             case "distribute":
-              return <DistributionSection poolFundId={id} />;
+              return <DistributionSection {...{ poolFundId }} />;
             default:
               return null;
           }
@@ -83,4 +76,4 @@ const PoolNav = () => {
   );
 };
 
-export default PoolNav;
+export default PoolBody;
