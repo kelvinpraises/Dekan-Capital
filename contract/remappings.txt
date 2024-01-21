@@ -1,0 +1,3 @@
+lib/allo-v2:openzeppelin-contracts/=lib/contracts/lib/openzeppelin-contracts/
+lib/contracts:openzeppelin-contracts/=lib/contracts/lib/openzeppelin-contracts/contracts/
+drip-network/=lib/contracts/src/
