@@ -6,9 +6,9 @@ import {
   ChevronUpIcon,
   ExternalLinkIcon,
 } from "@radix-ui/react-icons";
-import Input from "../atoms/Input";
 import ReviewSelect from "./ReviewSelect";
 import { AllocateSectionState } from "../organisms/AllocationSection";
+import Input from "./Input";
 
 interface cardProps {
   updateValues?: Dispatch<Partial<AllocateSectionState>>;
@@ -65,7 +65,7 @@ const ReviewCard = (card: cardProps) => {
 
             <Input
               label={"Description"}
-              input={false}
+              type="textarea"
               disabled
               value={
                 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium laboriosam deleniti delectus similique odio sunt reiciendis. Doloribus optio fugit ea?"
@@ -75,7 +75,7 @@ const ReviewCard = (card: cardProps) => {
 
             <Input
               label={"Token Request Amount"}
-              input={true}
+              type="text"
               disabled
               value={"Yeah hello there"}
               onChange={(e) => {}}
