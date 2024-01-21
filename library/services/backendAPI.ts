@@ -3,7 +3,7 @@ export interface User {
   avatarURL: string;
 }
 
-export interface EcoFund {
+export interface PoolFund {
   emoji: string;
   title: string;
   detail: string;
@@ -19,7 +19,7 @@ export interface Project {
 }
 
 export interface Showcase {
-  ecoFundId: number;
+  poolFundId: number;
   projectId: number;
   recipientId: string;
   status: number;
@@ -60,45 +60,45 @@ export const getUser = async (userId: string) => {
 };
 
 /*´:°•.°+.*•´.*:˚.°*.˚•´.°:°•.°•.*•´.*:˚.°*.˚•´.°:°•.°+.*•´.*:*/
-/*                     EcoFunds Section                     */
+/*                     PoolFunds Section                     */
 /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
 
 export const createPool = async (
-  ecoFund: EcoFund,
-  callback: (ecoFundId: string) => void
+  poolFund: PoolFund,
+  callback: (poolFundId: string) => void
 ) => {
-  const res = await fetch(`${BACKEND_ADDR}/eco-funds`, {
+  const res = await fetch(`${BACKEND_ADDR}/pool-funds`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(ecoFund),
+    body: JSON.stringify(poolFund),
     credentials: "include",
   });
 
-  const ecoFundId = (await res.json()).ecoFundId;
+  const poolFundId = (await res.json()).poolFundId;
 
-  if (ecoFundId) {
-    callback(ecoFundId);
+  if (poolFundId) {
+    callback(poolFundId);
   }
 };
 
-export const getEcoFundById = async (ecoFundId: string) => {
-  const res = await fetch(`${BACKEND_ADDR}/eco-funds/${ecoFundId}`, {
+export const getPoolFundById = async (poolFundId: string) => {
+  const res = await fetch(`${BACKEND_ADDR}/pool-funds/${poolFundId}`, {
     credentials: "include",
   });
 
   if (res.ok) {
     return await res.json();
   } else if (res.status === 404) {
-    throw new Error("ecoFund not found");
+    throw new Error("poolFund not found");
   } else {
-    throw new Error("Error fetching ecoFund");
+    throw new Error("Error fetching poolFund");
   }
 };
 
-export const getEcoFunds = async (userId: string) => {
-  const res = await fetch(`${BACKEND_ADDR}/eco-funds?userId=${userId}`, {
+export const getPoolFunds = async (userId: string) => {
+  const res = await fetch(`${BACKEND_ADDR}/pool-funds?userId=${userId}`, {
     credentials: "include",
   });
   return await res.json();
@@ -110,7 +110,7 @@ export const getEcoFunds = async (userId: string) => {
 
 export const createProject = async (
   project: Project,
-  callback: (ecoFundId: string) => void
+  callback: (poolFundId: string) => void
 ) => {
   const res = await fetch(`${BACKEND_ADDR}/projects`, {
     method: "POST",
@@ -154,11 +154,11 @@ export const getProjects = async (userId: string) => {
 /*                     Showcase Section                     */
 /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
 
-export const showcaseEcoFundProject = async (
+export const showcasePoolFundProject = async (
   showcase: Showcase,
   callback: () => void
 ) => {
-  const res = await fetch(`${BACKEND_ADDR}/showcase/${showcase.ecoFundId}`, {
+  const res = await fetch(`${BACKEND_ADDR}/showcase/${showcase.poolFundId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -172,8 +172,8 @@ export const showcaseEcoFundProject = async (
   }
 };
 
-export const getEcoFundProjects = async (ecoFundId: string) => {
-  const res = await fetch(`${BACKEND_ADDR}/showcase/${ecoFundId}`, {
+export const getPoolFundProjects = async (poolFundId: string) => {
+  const res = await fetch(`${BACKEND_ADDR}/showcase/${poolFundId}`, {
     credentials: "include",
   });
 
@@ -184,12 +184,12 @@ export const getEcoFundProjects = async (ecoFundId: string) => {
 /*                    Allocation Section                    */
 /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
 
-export const createEcoFundAllocation = async (
-  ecoFundId: string,
+export const createPoolFundAllocation = async (
+  poolFundId: string,
   allocations: Allocation[],
   callback: () => void
 ) => {
-  const res = await fetch(`${BACKEND_ADDR}/allocate/${ecoFundId}`, {
+  const res = await fetch(`${BACKEND_ADDR}/allocate/${poolFundId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -203,8 +203,8 @@ export const createEcoFundAllocation = async (
   }
 };
 
-export const getEcoFundAllocations = async (ecoFundId: string) => {
-  const res = await fetch(`${BACKEND_ADDR}/allocate/${ecoFundId}`, {
+export const getPoolFundAllocations = async (poolFundId: string) => {
+  const res = await fetch(`${BACKEND_ADDR}/allocate/${poolFundId}`, {
     credentials: "include",
   });
 

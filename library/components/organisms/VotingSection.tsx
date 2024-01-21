@@ -1,6 +1,6 @@
 import Button from "../atoms/Button";
 
-const VotingSection = ({ ecoFundId }: { ecoFundId: any }) => {
+const VotingSection = ({ poolFundId }: { poolFundId: any }) => {
   return (
     <div className="flex flex-col gap-4  flex-1 bg-white p-5 rounded-lg">
       <div className=" flex justify-between">

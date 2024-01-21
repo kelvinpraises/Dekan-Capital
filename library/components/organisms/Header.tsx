@@ -9,7 +9,7 @@ const Header = () => {
       </Link>
       <div className=" flex gap-6">
         <Button
-          text={"Create a Fund Pool"}
+          text={"Create a pooled fund"}
           handleClick={undefined}
           link={true}
           href={"/new-fund-pool"}

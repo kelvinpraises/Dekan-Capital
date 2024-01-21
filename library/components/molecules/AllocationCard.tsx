@@ -3,17 +3,17 @@ import { produce } from "immer";
 import { useRouter } from "next/navigation";
 import { Dispatch, useState } from "react";
 
-import { Allocation } from "@/library/backendAPI";
+import { Allocation } from "@/library/services/backendAPI";
 import { AllocateSectionState } from "../organisms/AllocationSection";
 
 
 interface cardProps {
-  ecoFundId: string;
+  poolFundId: string;
   updateValues?: Dispatch<Partial<AllocateSectionState>>;
   name: string;
   address: string;
-  createEcoFundAllocation?: (
-    ecoFundId: string,
+  createPoolFundAllocation?: (
+    poolFundId: string,
     allocations: Allocation[],
     callback: () => void
   ) => Promise<void>;
@@ -88,7 +88,7 @@ const AllocationCard = (card: cardProps) => {
           {!card.readonly && (
             <button
               onClick={() =>
-                card.createEcoFundAllocation!(card.ecoFundId, card.allocated, () =>
+                card.createPoolFundAllocation!(card.poolFundId, card.allocated, () =>
                   router.refresh()
                 )
               }
