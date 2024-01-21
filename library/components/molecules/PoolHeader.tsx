@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const PoolHeader = () => {
+const PoolHeader = ({ poolFundId }: { poolFundId: string }) => {
   const Tag = ({ isOpen }: { isOpen: boolean }) => {
     return (
       <span
