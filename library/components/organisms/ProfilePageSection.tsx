@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import Image from "next/image";
-import Button from "../atoms/Button";
 import { cn } from "@/library/utils";
+import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import Button from "../atoms/Button";
 import FundReceivedSection from "./FundReceivedSection";
 import InvestmentSection from "./InvestmentSection";
 
