@@ -1,5 +1,5 @@
 const Dekan = {
-    address: '0x',
+  address: "0x59C02fDcc72FaCB3a911dfb5631576372aA7a894",
   abi: [
     {
       inputs: [
