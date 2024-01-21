@@ -1,9 +1,23 @@
-import React from 'react'
+import React from "react";
+import Button from "../atoms/Button";
+import ReviewCard from "../molecules/ReviewCard";
 
-const ProjectSection = () => {
+const ProjectSection = ({ ecoFundId }: { ecoFundId: any }) => {
   return (
-    <div className=" flex-1 bg-white p-5 rounded-lg">project Section</div>
-  )
-}
+    <div className="flex flex-col gap-8">
+      <div className=" flex justify-between">
+        <p className=" text-sm">
+          Review showcased projects by accepting or rejecting applications
+        </p>
+        <Button text={"Upload Revision"} handleClick={undefined} />
+      </div>
+      <div className="flex flex-col gap-8">
+        {[1].map(() => {
+          return <ReviewCard name={"fgfgfg"} address={"0xB754369b3a7C430d7E94c14f33c097C398a0caa5"} />;
+        })}
+      </div>
+    </div>
+  );
+};
 
-export default ProjectSection
+export default ProjectSection;

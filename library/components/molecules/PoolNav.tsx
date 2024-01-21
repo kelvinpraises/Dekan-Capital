@@ -6,9 +6,12 @@ import DistributionSection from "../organisms/DistributionSection";
 import ProjectSection from "../organisms/ProjectSection";
 import SubmitSection from "../organisms/SubmitSection";
 import VotingSection from "../organisms/VotingSection";
+import { usePathname } from "next/navigation";
 
 const PoolNav = () => {
   const [activeScreen, setActiveScreen] = useState("detail");
+  const pathname = usePathname();
+  const id = pathname.split("/")[3];
 
   return (
     <div className="  bg-[#f4f9ff] flex-1 h-full">
@@ -55,13 +58,13 @@ const PoolNav = () => {
                 </div>
               );
             case "project":
-              return <ProjectSection />;
+              return <ProjectSection ecoFundId={id} />;
             case "allocation":
-              return <AllocationSection />;
+              return <AllocationSection ecoFundId={id} />;
             case "voting":
-              return <VotingSection />;
+              return <VotingSection ecoFundId={id} />;
             case "distribution":
-              return <DistributionSection />;
+              return <DistributionSection ecoFundId={id} />;
             default:
               return null;
           }
