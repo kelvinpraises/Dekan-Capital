@@ -215,31 +215,26 @@ app.post("/eco-funds", (req, res) => {
   }
 
   const {
-    ecoFundProposalId,
-    userId,
     emoji,
     title,
-    description,
+    detail,
     strategyAddress,
     createdAt,
   } = req.body;
 
   const insertQuery = `
-    INSERT INTO EcoFunds (createdBy, proposalPassed, ecoFundProposalId, allocationProposalId, userId, emoji, title, description, strategyAddress, createdAt)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO EcoFunds (createdBy, allocationProposalId, emoji, title, detail, strategyAddress, createdAt)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.run(
     insertQuery,
     [
       req.session.siwe.address,
-      false,
-      ecoFundProposalId,
       "",
-      userId,
       emoji,
       title,
-      description,
+      detail,
       strategyAddress,
       createdAt,
     ],
@@ -287,7 +282,7 @@ app.get("/eco-funds", (req, res) => {
   const { userId } = req.query;
 
   const query = userId
-    ? "SELECT * FROM EcoFunds WHERE userId = ?"
+    ? "SELECT * FROM EcoFunds WHERE createdBy = ?"
     : "SELECT * FROM EcoFunds";
   const params = userId ? [userId] : [];
 

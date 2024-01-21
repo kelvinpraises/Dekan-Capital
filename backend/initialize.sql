@@ -12,14 +12,12 @@ CREATE TABLE EcoFunds (
     ecoFundId INTEGER PRIMARY KEY,
     createdBy TEXT NOT NULL,
     allocationProposalId TEXT NOT NULL,
-    userId INTEGER NOT NULL,
     emoji TEXT NOT NULL,
     title TEXT NOT NULL,
-    description TEXT NOT NULL,
+    detail TEXT NOT NULL,
     strategyAddress TEXT NOT NULL,
     createdAt INTEGER NOT NULL,
-    FOREIGN KEY (createdBy) REFERENCES Users(address),
-    FOREIGN KEY (userId) REFERENCES Users(userId)
+    FOREIGN KEY (createdBy) REFERENCES Users(address)
 );
 
 -- Table for allocated projects within allocators
