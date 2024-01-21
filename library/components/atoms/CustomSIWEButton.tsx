@@ -73,7 +73,7 @@ const CustomSIWEButton = () => {
           {/* <div>Address: {data?.address}</div> */}
           {/* <div>ChainId: {data?.chainId}</div> */}
         {/* </div> */}
-        <button onClick={handleSignOut} className=" bg-slate-900 text-white px-4 rounded-xl ">{ellipsisAddress(data?.address)}</button>
+        <button  onClick={() => setOpen(true)} className=" bg-slate-900 text-white px-4 rounded-xl ">{ellipsisAddress(data?.address)}</button>
       </>
     );
   }
@@ -97,7 +97,7 @@ const CustomSIWEButton = () => {
   /** A wallet needs to be connected first */
   return (
     <>
-      <button onClick={() => setOpen(true)}>Connect Wallet</button>
+      <button onClick={() => setOpen(true)} className=" bg-slate-900 text-white px-4 rounded-xl ">Connect Wallet</button>
     </>
   );
 };
