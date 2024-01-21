@@ -1,6 +1,7 @@
 "use client";
 import { createUser } from "@/library/services/backendAPI";
 import { useStore } from "@/library/store/useStore";
+import { ellipsisAddress } from "@/library/utils";
 import { useModal, useSIWE } from "connectkit";
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
@@ -68,11 +69,11 @@ const CustomSIWEButton = () => {
   if (isSignedIn && isClient) {
     return (
       <>
-        <div onClick={() => setOpen(true)}>
-          <div>Address: {data?.address}</div>
-          <div>ChainId: {data?.chainId}</div>
-        </div>
-        <button onClick={handleSignOut}>Sign Out</button>
+        {/* <div onClick={() => setOpen(true)}> */}
+          {/* <div>Address: {data?.address}</div> */}
+          {/* <div>ChainId: {data?.chainId}</div> */}
+        {/* </div> */}
+        <button onClick={handleSignOut} className=" bg-slate-900 text-white px-4 rounded-xl ">{ellipsisAddress(data?.address)}</button>
       </>
     );
   }
