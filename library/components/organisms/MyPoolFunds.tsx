@@ -1,6 +1,6 @@
 import FundingPoolCard from "../molecules/FundingPoolCard";
 
-const DocfundSection = () => {
+const MyPoolFunds = () => {
   const data = [
     {
       title: "Write a twitter thread about moongate",
@@ -31,4 +31,4 @@ const DocfundSection = () => {
   );
 };
 
-export default DocfundSection;
+export default MyPoolFunds;

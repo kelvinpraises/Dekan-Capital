@@ -1,6 +1,6 @@
 import FundingPoolCard from "../molecules/FundingPoolCard";
 
-const FundingPoolSection = () => {
+const AllPoolFunds = () => {
   const data = [
     {
       title: "Write a twitter thread about moongate",
@@ -33,4 +33,4 @@ const FundingPoolSection = () => {
   );
 };
 
-export default FundingPoolSection;
+export default AllPoolFunds;

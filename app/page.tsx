@@ -1,13 +1,12 @@
-import DocfundSection from "@/library/components/organisms/DocfundSection";
-import FundingPoolSection from "@/library/components/organisms/FundingPoolSection";
-import React from "react";
+import AllPoolFunds from "@/library/components/organisms/AllPoolFunds";
+import MyPoolFunds from "@/library/components/organisms/MyPoolFunds";
 
 const page = () => {
   return (
     <>
       <div className=" flex-1 h-full flex gap-4 px-16">
-        <FundingPoolSection />
-        <DocfundSection />
+        <AllPoolFunds />
+        <MyPoolFunds />
       </div>
     </>
   );
