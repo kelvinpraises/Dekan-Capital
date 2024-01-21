@@ -6,7 +6,7 @@ const DetailSection = () => {
   };
   return (
     <div className=" flex-1 bg-white p-5 rounded-lg">
-      <div className="flex gap-4 flex-col">
+      {/* <div className=""> */}
         <div className="flex items-center gap-4">
           <div className="flex flex-col gap-1">
             <p className="text-xs font-bold">Strategy</p>
@@ -20,7 +20,7 @@ const DetailSection = () => {
             <p className="text-xs font-bold">Created</p>
             <p className="text-sm">{data?.createdAt}</p>
           </div>
-        </div>
+        {/* </div> */}
       </div>
     </div>
   );
