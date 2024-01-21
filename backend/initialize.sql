@@ -7,9 +7,9 @@ CREATE TABLE Users (
     UNIQUE (address)
 );
 
--- Table for EcoFunds
-CREATE TABLE EcoFunds (
-    ecoFundId INTEGER PRIMARY KEY,
+-- Table for PoolFunds
+CREATE TABLE PoolFunds (
+    poolFundId INTEGER PRIMARY KEY,
     createdBy TEXT NOT NULL,
     allocationProposalId TEXT NOT NULL,
     emoji TEXT NOT NULL,
@@ -24,13 +24,13 @@ CREATE TABLE EcoFunds (
 CREATE TABLE AllocatedProjects (
     allocationId INTEGER PRIMARY KEY,
     allocatedBy TEXT NOT NULL,
-    ecoFundId INTEGER NOT NULL,
+    poolFundId INTEGER NOT NULL,
     projectId INTEGER NOT NULL,
     amount REAL NOT NULL,
     FOREIGN KEY (allocatedBy) REFERENCES Users(address),
-    FOREIGN KEY (ecoFundId) REFERENCES EcoFunds(ecoFundId),
+    FOREIGN KEY (poolFundId) REFERENCES PoolFunds(poolFundId),
     FOREIGN KEY (projectId) REFERENCES Projects(projectId),
-    UNIQUE (allocatedBy, ecoFundId, projectId)
+    UNIQUE (allocatedBy, poolFundId, projectId)
 );
 
 -- Table for projects
@@ -56,11 +56,11 @@ CREATE TABLE Projects (
 -- }
 CREATE TABLE ShowcasedProjects (
     showcaseId INTEGER PRIMARY KEY,
-    ecoFundId INTEGER NOT NULL,
+    poolFundId INTEGER NOT NULL,
     projectId INTEGER NOT NULL,
     recipientId TEXT NOT NULL,
     tokensRequested REAL NOT NULL,
     status INTEGER NOT NULL,
-    FOREIGN KEY (ecoFundId) REFERENCES EcoFunds(ecoFundId),
+    FOREIGN KEY (poolFundId) REFERENCES PoolFunds(poolFundId),
     FOREIGN KEY (projectId) REFERENCES Projects(projectId)
 );

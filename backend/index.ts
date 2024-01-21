@@ -188,27 +188,27 @@ app.get("/users/:userId", (req, res) => {
     WHERE userId = ?
   `;
 
-  db.get(selectQuery, [userId], (err, ecoFund) => {
+  db.get(selectQuery, [userId], (err, poolFund) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
     }
 
-    if (!ecoFund) {
+    if (!poolFund) {
       res.status(404).json({ message: "user not found" });
       return;
     }
 
-    res.json(ecoFund);
+    res.json(poolFund);
   });
 });
 
 /*´:°•.°+.*•´.*:˚.°*.˚•´.°:°•.°•.*•´.*:˚.°*.˚•´.°:°•.°+.*•´.*:*/
-/*                     EcoFunds Section                     */
+/*                     PoolFunds Section                     */
 /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
 
-// Create a new ecoFund
-app.post("/eco-funds", (req, res) => {
+// Create a new poolFund
+app.post("/pool-funds", (req, res) => {
   if (!req.session.siwe) {
     res.status(401).json({ message: "You have to first sign_in" });
     return;
@@ -223,7 +223,7 @@ app.post("/eco-funds", (req, res) => {
   } = req.body;
 
   const insertQuery = `
-    INSERT INTO EcoFunds (createdBy, allocationProposalId, emoji, title, detail, strategyAddress, createdAt)
+    INSERT INTO PoolFunds (createdBy, allocationProposalId, emoji, title, detail, strategyAddress, createdAt)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -246,44 +246,44 @@ app.post("/eco-funds", (req, res) => {
       }
 
       res.json({
-        message: "ecoFund created successfully",
-        ecoFundId: this.lastID,
+        message: "poolFund created successfully",
+        poolFundId: this.lastID,
       });
     }
   );
 });
 
-// Read a single ecoFund filtered by ID
-app.get("/eco-funds/:ecoFundId", (req, res) => {
-  const { ecoFundId } = req.params;
+// Read a single poolFund filtered by ID
+app.get("/pool-funds/:poolFundId", (req, res) => {
+  const { poolFundId } = req.params;
 
   const selectQuery = `
-    SELECT * FROM EcoFunds
-    WHERE ecoFundId = ?
+    SELECT * FROM PoolFunds
+    WHERE poolFundId = ?
   `;
 
-  db.get(selectQuery, [ecoFundId], (err, ecoFund) => {
+  db.get(selectQuery, [poolFundId], (err, poolFund) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
     }
 
-    if (!ecoFund) {
-      res.status(404).json({ message: "ecoFund not found" });
+    if (!poolFund) {
+      res.status(404).json({ message: "poolFund not found" });
       return;
     }
 
-    res.json(ecoFund);
+    res.json(poolFund);
   });
 });
 
-// Read all ecoFunds with optional filtering by userId
-app.get("/eco-funds", (req, res) => {
+// Read all poolFunds with optional filtering by userId
+app.get("/pool-funds", (req, res) => {
   const { userId } = req.query;
 
   const query = userId
-    ? "SELECT * FROM EcoFunds WHERE createdBy = ?"
-    : "SELECT * FROM EcoFunds";
+    ? "SELECT * FROM PoolFunds WHERE createdBy = ?"
+    : "SELECT * FROM PoolFunds";
   const params = userId ? [userId] : [];
 
   db.all(query, params, (err, rows) => {
@@ -378,23 +378,23 @@ app.get("/projects", (req, res) => {
 /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
 
 // Create a new showcase
-app.post("/showcase/:ecoFundId/:projectId", (req, res) => {
+app.post("/showcase/:poolFundId/:projectId", (req, res) => {
   if (!req.session.siwe) {
     res.status(401).json({ message: "You have to first sign_in" });
     return;
   }
 
-  const { ecoFundId } = req.params;
+  const { poolFundId } = req.params;
   const { projectId, recipientId, status } = req.body;
 
   const insertQuery = `
-    INSERT INTO ShowcasedProjects (ecoFundId, projectId,  recipientId, status)
+    INSERT INTO ShowcasedProjects (poolFundId, projectId,  recipientId, status)
     VALUES (?, ?, ?, ?)
   `;
 
   db.run(
     insertQuery,
-    [ecoFundId, projectId, recipientId, status],
+    [poolFundId, projectId, recipientId, status],
     function (err) {
       if (err) {
         res.status(500).json({ error: err.message });
@@ -406,14 +406,14 @@ app.post("/showcase/:ecoFundId/:projectId", (req, res) => {
   );
 });
 
-// Read all showcased project under an ecoFund
-app.get("/showcase/:ecoFundId", (req, res) => {
-  const { ecoFundId } = req.params;
+// Read all showcased project under an poolFund
+app.get("/showcase/:poolFundId", (req, res) => {
+  const { poolFundId } = req.params;
   const selectQuery = `
     SELECT P.*
     FROM Projects P
     INNER JOIN ShowcasedProjects SP ON P.projectId = SP.projectId
-    WHERE SP.ecoFundId = ${ecoFundId}
+    WHERE SP.poolFundId = ${poolFundId}
   `;
 
   db.all(selectQuery, (err, projects) => {
@@ -432,14 +432,14 @@ app.get("/showcase/:ecoFundId", (req, res) => {
 /*                    Allocation Section                    */
 /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
 
-// Create and edit allocations under an ecoFund (expects an array of allocations)
-app.put("/allocate/:ecoFundId", (req, res) => {
+// Create and edit allocations under an poolFund (expects an array of allocations)
+app.put("/allocate/:poolFundId", (req, res) => {
   if (!req.session.siwe) {
     res.status(401).json({ message: "You have to first sign_in" });
     return;
   }
 
-  const { ecoFundId } = req.params;
+  const { poolFundId } = req.params;
   const allocations: { amount: number; projectId: string }[] = req.body; // Expecting an array of allocation objects
 
   if (!Array.isArray(allocations)) {
@@ -454,32 +454,32 @@ app.put("/allocate/:ecoFundId", (req, res) => {
     return total + parseFloat(allocation.amount as any);
   }, 0);
 
-  // Check if the total allocation exceeds the ecoFund's tokenAmount
-  const checkQuery = `SELECT tokenAmount FROM EcoFunds WHERE ecoFundId = ${ecoFundId}`;
-  db.get(checkQuery, (err, ecoFund: any) => {
+  // Check if the total allocation exceeds the poolFund's tokenAmount
+  const checkQuery = `SELECT tokenAmount FROM PoolFunds WHERE poolFundId = ${poolFundId}`;
+  db.get(checkQuery, (err, poolFund: any) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
     }
 
-    if (!ecoFund) {
-      res.status(404).json({ error: "ecoFund not found" });
+    if (!poolFund) {
+      res.status(404).json({ error: "poolFund not found" });
       console.log("err2");
 
       return;
     }
 
-    if (totalAllocation > ecoFund.tokenAmount) {
+    if (totalAllocation > poolFund.tokenAmount) {
       res
         .status(400)
-        .json({ error: "Total allocation exceeds ecoFund tokenAmount" });
+        .json({ error: "Total allocation exceeds poolFund tokenAmount" });
       return;
     }
 
     const sql = `
-    INSERT INTO AllocatedProjects (allocatedBy, ecoFundId, projectId, amount)
+    INSERT INTO AllocatedProjects (allocatedBy, poolFundId, projectId, amount)
     VALUES (?, ?, ?, ?)
-    ON CONFLICT (allocatedBy, ecoFundId, projectId)
+    ON CONFLICT (allocatedBy, poolFundId, projectId)
     DO UPDATE SET amount = excluded.amount
     `;
 
@@ -492,7 +492,7 @@ app.put("/allocate/:ecoFundId", (req, res) => {
           const { projectId, amount } = allocation;
           db.run(sql, [
             req.session.siwe?.address,
-            ecoFundId,
+            poolFundId,
             projectId,
             amount,
           ]);
@@ -511,9 +511,9 @@ app.put("/allocate/:ecoFundId", (req, res) => {
   });
 });
 
-// Read all allocators and their allocations under a specific ecoFund
-app.get("/allocate/:ecoFundId", (req, res) => {
-  const { ecoFundId } = req.params;
+// Read all allocators and their allocations under a specific poolFund
+app.get("/allocate/:poolFundId", (req, res) => {
+  const { poolFundId } = req.params;
   const selectQuery = `
     SELECT U.name AS allocatorName, U.address AS allocatorAddress,
            AP.projectId AS allocatedProjectId, AP.amount AS allocationAmount,
@@ -521,7 +521,7 @@ app.get("/allocate/:ecoFundId", (req, res) => {
     FROM AllocatedProjects AP
     INNER JOIN Users U ON AP.allocatedBy = U.address
     INNER JOIN Projects P ON AP.projectId = P.projectId
-    WHERE AP.ecoFundId = ${ecoFundId}
+    WHERE AP.poolFundId = ${poolFundId}
   `;
 
   db.all(selectQuery, (err, results) => {
