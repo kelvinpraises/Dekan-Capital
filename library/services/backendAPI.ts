@@ -97,7 +97,7 @@ export const getPoolFundById = async (poolFundId: string) => {
   }
 };
 
-export const getPoolFunds = async (userId: string) => {
+export const getPoolFunds = async (userId?: string) => {
   const res = await fetch(`${BACKEND_ADDR}/pool-funds?userId=${userId}`, {
     credentials: "include",
   });
