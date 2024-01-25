@@ -82,7 +82,7 @@ const CustomSIWEButton = () => {
   if (isConnected && isClient) {
     return (
       <>
-        <button onClick={handleSignIn} disabled={isLoading}>
+        <button className="bg-slate-900 text-white px-4 rounded-xl " onClick={handleSignIn} disabled={isLoading}>
           {isRejected // User Rejected
             ? "Try Again"
             : isLoading // Waiting for signing request
